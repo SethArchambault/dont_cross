@@ -90,12 +90,12 @@ void drawRect(int x, int y, int w, int h, Color color, void * renderer){
 int main() {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_SetHint (SDL_HINT_RENDER_SCALE_QUALITY, 0);
-    SDL_Window* window = SDL_CreateWindow( "Economy", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN );
+    SDL_Window* window = SDL_CreateWindow( "Don't Cross", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN );
     SDL_Event e;
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     State * state = malloc(sizeof(State));
 	state->is_initialized = 0;
-	state->memory = malloc(10000);
+	state->memory = malloc(50000);
 	state->memory_i = 0;
     state->drawRect = drawRect;
     state->saveMap = saveMap;
@@ -105,7 +105,10 @@ int main() {
     int run = 1;
     Color White = {255, 255, 255};  
     Color Black= {0, 0, 0};  
+    int counts_per_60fps= SDL_GetPerformanceFrequency()/ 60;
+    //p(counts_per_60fps);
     while(run) { 
+        int start = SDL_GetPerformanceCounter();
         while( SDL_PollEvent( &e ) != 0 ) {
             if( e.type == SDL_KEYDOWN ) 
             {      
@@ -125,7 +128,9 @@ int main() {
         SDL_RenderClear(renderer);
 
         program(state);
-        SDL_Delay(500);   
+        int diff = SDL_GetPerformanceCounter() -  start;
+        //p(counts_per_60fps / diff);
+        SDL_Delay(counts_per_60fps / diff);
         SDL_RenderPresent(renderer);
     } // while run
 }

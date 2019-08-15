@@ -6,6 +6,8 @@
 #define _map_w 12
 #define _map_h 12
 #define _map_size (_map_w * _map_h * sizeof(char))
+#define _walker_count 5
+#define p(expr) printf("%d: %s %d\n",__LINE__, #expr, expr);
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -49,12 +51,16 @@ typedef struct {
 	void * saveMap;
 	void * loadMap;
 	/* data */
+    int health;
     int input;
     int is_initialized;
     int reload_map;
 	int stage;
 	char * map;
     Person player;
+    Direction prior_direction;
+    Person * walker;
+    int walker_i;
     Object goal;
     uint clock;
 	/* sdl */
